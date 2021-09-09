@@ -8,7 +8,7 @@ const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
 
-const port = 1337;
+const port = process.env.PORT || 1337;
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

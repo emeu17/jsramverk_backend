@@ -31,42 +31,42 @@ async function testCreate() {
 }
 
 
-// async function testUpdate() {
-//     console.log("Inside testUpdate");
+async function testUpdate() {
+    console.log("Inside testUpdate");
  
-//     const db = await database.getDb();
-//     const col = await db.collection;
+    const db = await database.getDb();
+    const col = await db.collection;
     
-//     //find and update first mumin
-//     const filter = { namn: "Eee" };
+    //find and update first mumin
+    const filter = { namn: "Eee" };
 
-//     // this option instructs the method to create a document if no documents match the filter
+    // this option instructs the method to create a document if no documents match the filter
 
-//     // const options = { upsert: true };
-//     // then call the function below like this:
-//     // const result = await col.updateOne(filter, updateDoc, options);
+    // const options = { upsert: true };
+    // then call the function below like this:
+    // const result = await col.updateOne(filter, updateDoc, options);
 
-//     // create a document that sets the plot of the movie
+    // create a document that sets the plot of the movie
 
-//     const updateDoc = {
-//         $set: {
-//         bor:
-//             "Sundsvall",
-//         },
-//     };
+    const updateDoc = {
+        $set: {
+        bor:
+            "Sundsvall",
+        },
+    };
 
-//     const result = await col.updateOne(filter, updateDoc);
+    const result = await col.updateOne(filter, updateDoc);
 
-//     console.log(
+    console.log(
 
-//         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
 
-//     );
-//     // await col.updateOne();
-//     // await col.insertMany(docs);
+    );
+    // await col.updateOne();
+    // await col.insertMany(docs);
 
-//     const resultSet = await db.collection.find({}).toArray();
-//     console.log(resultSet);
-//     await db.client.close();
-// }
+    const resultSet = await db.collection.find({}).toArray();
+    console.log(resultSet);
+    await db.client.close();
+}
 
