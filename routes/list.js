@@ -5,8 +5,9 @@ const database = require("../db/database.js");
 //route /list
 //lists all saved documents
 router.get("/", async (req, res) => {
+    let db;
     try {
-        const db = await database.getDb();
+        db = await database.getDb();
 
         const resultSet = await db.collection.find({}).toArray();
 

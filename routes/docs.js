@@ -4,64 +4,105 @@ const database = require("../db/database.js");
 
 // Testing routes with method
 router.get("/", async (req, res) => {
-    const db = await database.getDb();
-    const col = await db.collection;
-    const resultSet = await db.collection.find({}).toArray();
-    res.json({
-        data: {
-            msg: resultSet
+    let db;
+    try {
+        db = await database.getDb();
+        const resultSet = await db.collection.find({}).toArray();
+        // res.json({
+        //     data: {
+        //         msg: resultSet
+        //     }
+        // });
+        if (resultSet) {
+            return res.json(resultSet);
         }
-    });
+    } catch (e) {
+        return res.status(500).json({
+            errors: {
+                status: 500,
+                source: "/",
+                title: "Database error",
+                detail: e.message
+            }
+        });
+    } finally {
+        await db.client.close();
+    }
 });
 
 //create new document
 router.post("/", async (req, res) => {
-    // let name = req.body.name;
-    // let cont = req.body.content;
+    let db;
+    try {
+        db = await database.getDb();
+        const col = await db.collection;
 
-    // res.status(201).json({
-    //     data: {
-    //         msg: "Got a POST request, sending back 201 Created for" + name + ", content: " + cont
-    //     }
-    // });
-    
-    const db = await database.getDb();
-    const col = await db.collection;
+        const doc = { name: req.body.name, content: req.body.content };
 
-    const doc = { name: req.body.name, content: req.body.content };
+        const result = await col.insertOne(doc);
 
-    const result = await col.insertOne(doc);
-    res.status(201).json({
-        data: {
-            msg: `${result.insertedCount} documents were inserted with the _id: ${result.insertedId}`
+        if (result) {
+            return res.status(201).json({
+                data: {
+                    msg: `${result.insertedCount} documents were inserted with the _id: ${result.insertedId}`
+                }
+            });
         }
-    });
+    } catch (e) {
+        return res.status(500).json({
+            errors: {
+                status: 500,
+                source: "/",
+                title: "Database error",
+                detail: e.message
+            }
+        });
+    } finally {
+        await db.client.close();
+    }
 });
 
 //update document
 router.put("/", async (req, res) => {
-    const db = await database.getDb();
-    const col = await db.collection;
-    
-    //find and update first doc
-    const filter = { name: req.body.name };
+    let db;
+    try {
+        db = await database.getDb();
+        const col = await db.collection;
 
-    const updateDoc = {
-        $set: {
-        content:
-            req.body.content,
-        },
-    };
+        //find and update first doc
+        const filter = { name: req.body.name };
 
-    const result = await col.updateOne(filter, updateDoc);
+        const updateDoc = {
+            $set: {
+            content:
+                req.body.content,
+            },
+        };
 
-    console.log(
+        const result = await col.updateOne(filter, updateDoc);
 
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+        // console.log("id: " + filter._id);
+        console.log(
 
-    );
-    // PUT requests should return 204 No Content
-    res.status(204).send();
+            `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+
+        );
+        // PUT requests should return 204 No Content
+        if (result) {
+            return  res.status(204).send();
+        }
+    } catch (e) {
+        return res.status(500).json({
+            errors: {
+                status: 500,
+                source: "/",
+                title: "Database error",
+                detail: e.message
+            }
+        });
+    } finally {
+        await db.client.close();
+    }
 });
 
 //not implemented yet
