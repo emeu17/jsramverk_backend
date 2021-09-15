@@ -1,7 +1,6 @@
 /**
  * Connect to the database and setup it with some default data.
  */
-"use strict";
 
 const database = require("../db/database.js");
 const fs = require("fs");
@@ -17,10 +16,10 @@ testCreate();
 
 async function testCreate() {
     console.log("Test create");
- 
+
     const db = await database.getDb();
     const col = await db.collection;
-    
+
     //remove all in docs, then add all from docs setup.json
     await col.deleteMany();
     await col.insertMany(docs);
@@ -33,10 +32,10 @@ async function testCreate() {
 
 async function testUpdate() {
     console.log("Inside testUpdate");
- 
+
     const db = await database.getDb();
     const col = await db.collection;
-    
+
     //find and update first mumin
     const filter = { namn: "Eee" };
 
@@ -69,4 +68,3 @@ async function testUpdate() {
     console.log(resultSet);
     await db.client.close();
 }
-

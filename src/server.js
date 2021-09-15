@@ -1,7 +1,6 @@
 /**
  * Connect to the database and search using a criteria.
  */
-"use strict";
 
 // MongoDB
 const mongo = require("mongodb").MongoClient;
