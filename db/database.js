@@ -5,7 +5,7 @@ const collectionName = "docs";
 
 const database = {
     getDb: async function getDb () {
-        // let dsn = `mongodb://localhost:27017/mumin`;
+        // let dsn = `mongodb://localhost:27017/docs`;
 
         let dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
