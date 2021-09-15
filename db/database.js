@@ -15,8 +15,8 @@ try {
 
 // if environmental variable for username and password exists, use these
 // otherwise use config-variables
-const username = process.env.username || config.username;
-const password = process.env.password || config.password;
+const dbUname = process.env.DBUNAME || config.username;
+const dbPwd = process.env.DBPWD || config.password;
 
 
 const database = {
@@ -26,7 +26,7 @@ const database = {
         let dsn = "mongodb://localhost:27017/docs";
 
         if (process.env.NODE_ENV !== 'test') {
-            dsn = `mongodb+srv://${username}:${password}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+            dsn = `mongodb+srv://${dbUname}:${dbPwd}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
         }
 
         const client  = await mongo.connect(dsn, {
