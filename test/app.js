@@ -8,7 +8,7 @@ chai.should();
 
 chai.use(chaiHttp);
 
-describe('Reports', () => {
+describe('App.js', () => {
     describe('GET /', () => {
         it('200 HAPPY PATH', (done) => {
             chai.request(server)
