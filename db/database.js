@@ -7,10 +7,10 @@ const database = {
     getDb: async function getDb () {
         // let dsn = `mongodb://localhost:27017/docs`;
 
-        let dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+        let dsn = "mongodb://localhost:27017/docs";
 
-        if (process.env.NODE_ENV === 'test') {
-            dsn = "mongodb://localhost:27017/docs";
+        if (process.env.NODE_ENV !== 'test') {
+            dsn = `mongodb+srv://${config.username}:${config.password}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
         }
 
         const client  = await mongo.connect(dsn, {
