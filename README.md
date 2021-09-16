@@ -1,6 +1,6 @@
 # Jsramverk
 
-This project was created during the course Jsramverk, autum 2021
+This project was created during the course Jsramverk, autumn 2021
 
 ## Kmom02
 
@@ -14,3 +14,7 @@ and not have to restart the server each time.
 
 You will find the routes on http://localhost:1337
 with the routes /, /docs and /list deployed. With the route ***docs*** you can list, create a new document (post) or update a document (put). With post or put you need to supply the document  ***name*** and (new) ***content***)
+
+## Kmom03
+
+Added tests using Mocha and Chai.
