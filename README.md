@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/emeu17/jsramverk_backend.svg?branch=main)](https://app.travis-ci.com/emeu17/jsramverk_backend)
+
 # Jsramverk
 
 This project was created during the course Jsramverk, autumn 2021
@@ -17,4 +19,4 @@ with the routes /, /docs and /list deployed. With the route ***docs*** you can l
 
 ## Kmom03
 
-Added tests using Mocha and Chai.
+Added tests using Mocha and Chai. Moved some of the code from the routes to model-files for easier maintenance and reusability.
