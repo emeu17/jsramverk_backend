@@ -6,10 +6,33 @@ const server = require('../app.js');
 const HTMLParser = require('node-html-parser');
 
 chai.should();
-
+const database = require("../db/database.js");
+const collectionName = "docs";
 chai.use(chaiHttp);
 
 describe('Documents', () => {
+    before(() => {
+        return new Promise(async (resolve) => {
+            const db = await database.getDb();
+
+            db.db.listCollections(
+                { name: collectionName }
+            )
+                .next()
+                .then(async function(info) {
+                    if (info) {
+                        await db.collection.drop();
+                    }
+                })
+                .catch(function(err) {
+                    console.error(err);
+                })
+                .finally(async function() {
+                    await db.client.close();
+                    resolve();
+                });
+        });
+    });
     describe('GET /docs', () => {
         it('200 HAPPY PATH', (done) => {
             chai.request(server)
@@ -25,8 +48,14 @@ describe('Documents', () => {
 
     describe('POST /docs', () => {
         it('201 HAPPY PATH', (done) => {
+            const data = {
+                name: "Test new document",
+                content: "Testing 123 content"
+            };
+
             chai.request(server)
                 .post("/docs")
+                .send(data)
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.an("object");
@@ -40,8 +69,13 @@ describe('Documents', () => {
 
     describe('PUT /docs', () => {
         it('204 HAPPY PATH', (done) => {
+            const data = {
+                name: "Test new document",
+                content: "Testing 123 NEW content"
+            };
             chai.request(server)
                 .put("/docs")
+                .send(data)
                 .end((err, res) => {
                     res.should.have.status(204);
                     res.body.should.be.an("object");

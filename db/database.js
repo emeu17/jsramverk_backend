@@ -25,9 +25,9 @@ const database = {
 
         let dsn = "mongodb://localhost:27017/docs";
 
-        if (process.env.NODE_ENV !== 'test') {
-            dsn = `mongodb+srv://${dbUname}:${dbPwd}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-        }
+        // if (process.env.NODE_ENV !== 'test') {
+        //     dsn = `mongodb+srv://${dbUname}:${dbPwd}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+        // }
 
         const client  = await mongo.connect(dsn, {
             useNewUrlParser: true,
@@ -37,6 +37,7 @@ const database = {
         const collection = await db.collection(collectionName);
 
         return {
+            db: db,
             collection: collection,
             client: client,
         };
