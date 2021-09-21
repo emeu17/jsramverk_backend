@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const database = require("../db/database.js");
 const data = require("../models/data.js");
 
 // Testing routes with method

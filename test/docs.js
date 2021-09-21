@@ -3,14 +3,15 @@ process.env.NODE_ENV = 'test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../app.js');
-const HTMLParser = require('node-html-parser');
 
 chai.should();
+
 const database = require("../db/database.js");
 const collectionName = "docs";
+
 chai.use(chaiHttp);
 
-describe('Documents', () => {
+describe('docs', () => {
     before(() => {
         return new Promise(async (resolve) => {
             const db = await database.getDb();
@@ -73,6 +74,7 @@ describe('Documents', () => {
                 name: "Test new document",
                 content: "Testing 123 NEW content"
             };
+
             chai.request(server)
                 .put("/docs")
                 .send(data)

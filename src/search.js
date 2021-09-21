@@ -6,15 +6,15 @@ const mongo = require("mongodb").MongoClient;
 const dsn =  process.env.DBWEBB_DSN || "mongodb://localhost:27017/mumin";
 
 // Find documents for this living in...
-const criteria1 = {
-    bor: "Mumindalen"
-};
-const projection1 = {
-    namn: 1,
-    bor: 1,
-    _id: 0
-};
-const limit1 = 3;
+// const criteria1 = {
+//     bor: "Mumindalen"
+// };
+// const projection1 = {
+//     namn: 1,
+//     bor: 1,
+//     _id: 0
+// };
+// const limit1 = 3;
 
 // Find documents where namn starts with string
 const criteria2 = {

@@ -12,7 +12,7 @@ const docs = JSON.parse(fs.readFileSync(
 
 testCreate();
 
-// testUpdate();
+testUpdate();
 
 async function testCreate() {
     console.log("Test create");
@@ -25,6 +25,7 @@ async function testCreate() {
     await col.insertMany(docs);
 
     const resultSet = await db.collection.find({}).toArray();
+
     console.log(resultSet);
     await db.client.close();
 }
@@ -49,8 +50,7 @@ async function testUpdate() {
 
     const updateDoc = {
         $set: {
-        bor:
-            "Sundsvall",
+            bor: "Sundsvall",
         },
     };
 
@@ -58,13 +58,14 @@ async function testUpdate() {
 
     console.log(
 
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+        `${result.matchedCount} docs matched filter, updated ${result.modifiedCount} document(s)`,
 
     );
     // await col.updateOne();
     // await col.insertMany(docs);
 
     const resultSet = await db.collection.find({}).toArray();
+
     console.log(resultSet);
     await db.client.close();
 }

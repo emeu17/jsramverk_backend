@@ -1,11 +1,13 @@
 const database = require("../db/database.js");
 
 const data = {
-    getAllData: async function (res, req) {
+    getAllData: async function (res) {
         let db;
+
         try {
             db = await database.getDb();
             const resultSet = await db.collection.find({}).toArray();
+
             // res.json({
             //     data: {
             //         msg: resultSet
@@ -30,6 +32,7 @@ const data = {
 
     createData: async function (res, req) {
         let db;
+
         try {
             db = await database.getDb();
             const col = await db.collection;
@@ -41,7 +44,7 @@ const data = {
             if (result) {
                 return res.status(201).json({
                     data: {
-                        msg: `${result.insertedCount} documents were inserted with the _id: ${result.insertedId}`
+                        msg: `${result.insertedCount} docs inserted with _id: ${result.insertedId}`
                     }
                 });
             }
@@ -61,6 +64,7 @@ const data = {
 
     updateData: async function (res, req) {
         let db;
+
         try {
             db = await database.getDb();
             const col = await db.collection;
@@ -70,8 +74,7 @@ const data = {
 
             const updateDoc = {
                 $set: {
-                content:
-                    req.body.content,
+                    content: req.body.content,
                 },
             };
 
@@ -80,7 +83,7 @@ const data = {
             // console.log("id: " + filter._id);
             console.log(
 
-                `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+                `${result.matchedCount} docs matched, updated ${result.modifiedCount} document(s)`,
 
             );
             // PUT requests should return 204 No Content

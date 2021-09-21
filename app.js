@@ -4,6 +4,14 @@ const morgan = require('morgan');
 const app = express();
 const bodyParser = require("body-parser");
 
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"]
+    }
+});
+
 const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
@@ -27,6 +35,11 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 }
 
+//event-listener to check for connections
+io.sockets.on('connection', function(socket) {
+    console.log(socket.id); // Nått lång och slumpat
+});
+
 app.use('/', index);
 app.use('/list', list);
 app.use('/docs', docs);
@@ -36,6 +49,7 @@ app.use('/docs', docs);
 // Put this last
 app.use((req, res, next) => {
     var err = new Error("Not Found");
+
     err.status = 404;
     next(err);
 });

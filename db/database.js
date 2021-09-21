@@ -20,13 +20,15 @@ const dbPwd = process.env.DBPWD || config.password;
 
 
 const database = {
-    getDb: async function getDb () {
+    getDb: async function getDb() {
         // let dsn = `mongodb://localhost:27017/docs`;
 
         let dsn = "mongodb://localhost:27017/docs";
 
         if (process.env.NODE_ENV !== 'test') {
-            dsn = `mongodb+srv://${dbUname}:${dbPwd}@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+            const myDb = "@cluster0.mbjcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
+            dsn = `mongodb+srv://${dbUname}:${dbPwd}${myDb}`;
         }
 
         const client  = await mongo.connect(dsn, {
