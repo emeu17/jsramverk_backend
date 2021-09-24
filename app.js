@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer, {
     cors: {
-        origin: "*",
+        origin: "http://www.student.bth.se",
         methods: ["GET", "POST"]
     }
 });
@@ -40,27 +40,24 @@ io.sockets.on('connection', function(socket) {
     console.log(socket.id); // Nått lång och slumpat
 });
 
-let lastRoomId;
+// let lastRoomId;
 
 io.on('connection', (client) => {
-    // client.on('client-event', (docContent, docId) => {
-    //     console.log(docContent);
-    //     console.log("doc id: " + docId);
-    // });
-
     client.on('create', function(room) {
-        client.leave(lastRoomId);
+        // client.leave(lastRoomId);
         client.join(room);
-        lastRoomId = room;
-        console.log("Joined room: " + room);
+        // lastRoomId = room;
+        // console.log("Joined room: " + room);
     });
 
     client.on("doc", function (data) {
         // client.to(data["_id"]).emit("doc", data);
         client.to(data["_id"]).emit("doc", data);
-        console.log("emitting data: " + data["html"]);
+        // console.log("emitting data: " + data["html"]);
+    });
 
-        // Spara till databas och göra annat med data
+    client.on("leave", function(room) {
+        client.leave(room);
     });
 });
 

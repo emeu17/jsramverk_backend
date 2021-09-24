@@ -1,4 +1,5 @@
 const database = require("../db/database.js");
+const ObjectId = require("mongodb").ObjectId;
 
 const data = {
     getAllData: async function (res) {
@@ -65,7 +66,7 @@ const data = {
             const col = await db.collection;
 
             //find and update first doc
-            const filter = { name: req.body._id };
+            const filter = { _id: new ObjectId(req.body._id)};
 
             const updateDoc = {
                 $set: {
@@ -73,7 +74,13 @@ const data = {
                 },
             };
 
-            const result = await col.updateOne(filter, updateDoc);
+            const result = await col.update(filter, updateDoc);
+            // const result = await col.update({
+            //     _id: new ObjectId(req.body._id)
+            // }, {$set: {
+            //     content: req.body.content
+            // }});
+
 
             // console.log("id: " + filter._id);
             console.log(
