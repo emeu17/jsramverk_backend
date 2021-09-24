@@ -8,11 +8,6 @@ const data = {
             db = await database.getDb();
             const resultSet = await db.collection.find({}).toArray();
 
-            // res.json({
-            //     data: {
-            //         msg: resultSet
-            //     }
-            // });
             if (resultSet) {
                 return res.json(resultSet);
             }
@@ -44,7 +39,7 @@ const data = {
             if (result) {
                 return res.status(201).json({
                     data: {
-                        msg: `${result.insertedCount} docs inserted with _id: ${result.insertedId}`
+                        msg: `${result.insertedId}`
                     }
                 });
             }
@@ -70,7 +65,7 @@ const data = {
             const col = await db.collection;
 
             //find and update first doc
-            const filter = { name: req.body.name };
+            const filter = { name: req.body._id };
 
             const updateDoc = {
                 $set: {

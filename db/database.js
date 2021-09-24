@@ -21,8 +21,6 @@ const dbPwd = process.env.DBPWD || config.password;
 
 const database = {
     getDb: async function getDb() {
-        // let dsn = `mongodb://localhost:27017/docs`;
-
         let dsn = "mongodb://localhost:27017/docs";
 
         if (process.env.NODE_ENV !== 'test') {
