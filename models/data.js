@@ -1,12 +1,14 @@
 const database = require("../db/database.js");
 const ObjectId = require("mongodb").ObjectId;
 
+const collectionName = "docs";
+
 const data = {
     getAllData: async function (res) {
         let db;
 
         try {
-            db = await database.getDb();
+            db = await database.getDb(collectionName);
             const resultSet = await db.collection.find({}).toArray();
 
             if (resultSet) {
@@ -30,7 +32,7 @@ const data = {
         let db;
 
         try {
-            db = await database.getDb();
+            db = await database.getDb(collectionName);
             const col = await db.collection;
 
             const doc = { name: req.body.name, content: req.body.content };
@@ -62,7 +64,7 @@ const data = {
         let db;
 
         try {
-            db = await database.getDb();
+            db = await database.getDb(collectionName);
             const col = await db.collection;
 
             //find and update first doc

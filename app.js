@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer, {
     cors: {
-        origin: "http://www.student.bth.se",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -15,6 +15,7 @@ const io = require("socket.io")(httpServer, {
 const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
+const auth = require("./routes/auth.js");
 
 const port = process.env.PORT || 1337;
 
@@ -65,6 +66,7 @@ io.on('connection', (client) => {
 app.use('/', index);
 app.use('/list', list);
 app.use('/docs', docs);
+app.use("/auth", auth);
 
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler
