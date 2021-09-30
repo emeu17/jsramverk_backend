@@ -22,20 +22,105 @@ const auth = {
         console.log("inside register user");
     },
 
-    login: function (res, body) {
+    login: async function (res, body) {
         const email = body.email;
-        console.log("email: " + email);
-        // console.log("inside printlogin");
-        // const token = jwt.sign({ email: req.email }, secret, { expiresIn: '1h'});
-        // // const token = generateAccessToken({ username: req.body.username });
-        // res.json(token);
+        const password = body.password;
+
+        if (!email || !password) {
+            return res.status(401).json({
+                errors: {
+                    status: 401,
+                    source: "/login",
+                    title: "Email or password missing",
+                    detail: "Email or password missing in request"
+                }
+            });
+        }
+
+        let db;
+
+        try {
+            db = await database.getDb(collectionName);
+
+            const filter = { email: email };
+
+            const user = await db.collection.findOne(filter);
+
+            if (user) {
+                console.log(user);
+                // console.log(user);
+                return auth.comparePasswords(
+                    res,
+                    password,
+                    user,
+                );
+            } else {
+                return res.status(401).json({
+                    errors: {
+                        status: 401,
+                        source: "/login",
+                        title: "User not found",
+                        detail: "User with provided email not found."
+                    }
+                });
+            }
+        } catch (e) {
+            return res.status(500).json({
+                errors: {
+                    status: 500,
+                    source: "/login",
+                    title: "Database error",
+                    detail: e.message
+                }
+            });
+        } finally {
+            await db.client.close();
+        }
+    },
+
+    comparePasswords: function(res, password, user) {
+        console.log("inside comparePasswords");
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    errors: {
+                        status: 500,
+                        source: "/login",
+                        title: "bcrypt error",
+                        detail: "bcrypt error"
+                    }
+                });
+            }
+
+            if (result) {
+                let payload = { email: user.email };
+                let jwtToken = jwt.sign(payload, secret, { expiresIn: '1h' });
+
+                return res.json({
+                    data: {
+                        type: "success",
+                        message: "User logged in",
+                        user: user.email,
+                        token: jwtToken
+                    }
+                });
+            }
+
+            return res.status(401).json({
+                errors: {
+                    status: 401,
+                    source: "/login",
+                    title: "Wrong password",
+                    detail: "Password is incorrect."
+                }
+            });
+        });
     },
 
     register: async function (res, body) {
         const email = body.email;
         const password = body.password;
-        // console.log("email: " + email);
-        // console.log("password: " + password);
+
         if (!email || !password) {
             return res.status(401).json({
                 errors: {
