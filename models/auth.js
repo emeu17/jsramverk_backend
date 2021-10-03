@@ -18,10 +18,6 @@ try {
 const secret = process.env.JWT_SECRET || config.secret;
 
 const auth = {
-    registerUser: function (req, res) {
-        console.log("inside register user");
-    },
-
     login: async function (res, body) {
         const email = body.email;
         const password = body.password;
@@ -46,9 +42,10 @@ const auth = {
 
             const user = await db.collection.findOne(filter);
 
+            // console.log("user");
+            // console.log(user);
+
             if (user) {
-                console.log(user);
-                // console.log(user);
                 return auth.comparePasswords(
                     res,
                     password,
@@ -79,7 +76,7 @@ const auth = {
     },
 
     comparePasswords: function(res, password, user) {
-        console.log("inside comparePasswords");
+        // console.log("inside comparePasswords");
         bcrypt.compare(password, user.password, (err, result) => {
             if (err) {
                 return res.status(500).json({
@@ -178,7 +175,10 @@ const auth = {
     },
 
     checkToken: function(req, res, next) {
-        console.log("checktoken");
+        // console.log("checktoken");
+        // console.log("doc name and content:");
+        // console.log(req.body.name);
+        // console.log(req.body.content);
         const token = req.headers['x-access-token'];
 
         jwt.verify(token, secret, function(err, decoded) {
@@ -193,9 +193,38 @@ const auth = {
                 });
             }
 
+            req.user = {};
+            req.user.email = decoded.email;
+            console.log("user: " + req.body.user);
+            req.user.newUser = req.body.user;
+
             return next();
             // next();
         });
+    },
+
+    users: async function(req, res) {
+        let db;
+
+        try {
+            db = await database.getDb(collectionName);
+            const resultSet = await db.collection.find({}).toArray();
+
+            if (resultSet) {
+                return res.json(resultSet);
+            }
+        } catch (e) {
+            return res.status(500).json({
+                errors: {
+                    status: 500,
+                    source: "/",
+                    title: "Database error",
+                    detail: e.message
+                }
+            });
+        } finally {
+            await db.client.close();
+        }
     }
 };
 

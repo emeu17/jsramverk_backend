@@ -11,8 +11,34 @@ const collectionName = "docs";
 
 chai.use(chaiHttp);
 
+let token = "";
+
 describe('docs', () => {
     before(() => {
+        // let user = {
+        //     email: "test@test.com",
+        //     password: "test123"
+        // };
+        //
+        // chai.request(server)
+        // .post('/auth/register')
+        // .send(user)
+        // .end((err, response) => {
+        //     console.log("inside register");
+        //     // console.log(token);
+        //     // token = response.body.token; // save the token!
+        //     done();
+        // });
+        //
+        // chai.request(server)
+        // .post('/auth/login')
+        // .send(user)
+        // .end((err, response) => {
+        //     console.log("token");
+        //     console.log(token);
+        //     token = response.body.token; // save the token!
+        //     done();
+        // });
         return new Promise(async (resolve) => {
             const db = await database.getDb(collectionName);
 
@@ -35,9 +61,49 @@ describe('docs', () => {
         });
     });
     describe('GET /docs', () => {
+        it('should get 201 register user', (done) => {
+            let user = {
+                email: "test@test.com",
+                password: "test123"
+            };
+
+            chai.request(server)
+                .post("/auth/register")
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    done();
+                });
+        });
+        it('should get 200 login user', (done) => {
+            let user = {
+                email: "test@test.com",
+                password: "test123"
+            };
+
+            chai.request(server)
+                .post("/auth/login")
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.an("object");
+                    res.body.should.have.property("data");
+                    res.body.data.should.have.property("message");
+                    res.body.data.message.should.equal("User logged in");
+
+                    res.body.data.should.have.property("user");
+                    // res.body.data.user.should.have.property("email");
+                    // res.body.data.user.email.should.equal("test@test.com");
+
+                    res.body.data.should.have.property("token");
+                    token = res.body.data.token;
+                    done();
+                });
+        });
         it('200 HAPPY PATH', (done) => {
             chai.request(server)
                 .get("/docs")
+                .set("x-access-token", token)
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.an("array");
@@ -48,6 +114,43 @@ describe('docs', () => {
     });
 
     describe('POST /docs', () => {
+        it('should get 201 register user', (done) => {
+            let user = {
+                email: "test@test.com",
+                password: "test123"
+            };
+
+            chai.request(server)
+                .post("/auth/register")
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    done();
+                });
+        });
+        it('should get 200 login user', (done) => {
+            let user = {
+                email: "test@test.com",
+                password: "test123"
+            };
+
+            chai.request(server)
+                .post("/auth/login")
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.an("object");
+                    res.body.should.have.property("data");
+                    res.body.data.should.have.property("message");
+                    res.body.data.message.should.equal("User logged in");
+
+                    res.body.data.should.have.property("user");
+                    res.body.data.should.have.property("token");
+                    token = res.body.data.token;
+                    done();
+                });
+        });
+
         it('201 HAPPY PATH', (done) => {
             const data = {
                 name: "Test new document",
@@ -56,6 +159,7 @@ describe('docs', () => {
 
             chai.request(server)
                 .post("/docs")
+                .set("x-access-token", token)
                 .send(data)
                 .end((err, res) => {
                     res.should.have.status(201);

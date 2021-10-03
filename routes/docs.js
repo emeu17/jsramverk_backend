@@ -1,15 +1,29 @@
 var express = require('express');
 var router = express.Router();
 const data = require("../models/data.js");
+const auth = require("../models/auth.js");
 
-// Testing routes with method
+
 router.get('/',
-    // console.log("Hello inside docs");
+    (req, res, next) => auth.checkToken(req, res, next),
     (req, res) => data.getAllData(res, req)
+);
+
+//get documents for a specific user
+router.get('/userDocs',
+    (req, res, next) => auth.checkToken(req, res, next),
+    (req, res) => data.getUserDocs(res, req)
+);
+
+//add allowed user to document
+router.post('/userDocs',
+    (req, res, next) => auth.checkToken(req, res, next),
+    (req, res) => data.addAllowedUser(res, req)
 );
 
 //create new document
 router.post('/',
+    (req, res, next) => auth.checkToken(req, res, next),
     (req, res) => data.createData(res, req)
 );
 

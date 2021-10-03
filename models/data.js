@@ -28,14 +28,111 @@ const data = {
         }
     },
 
-    createData: async function (res, req) {
+    getUserDocs: async function(res, req) {
+        //get email from auth.checkToken
+        const email = req.user.email;
+
+        let db;
+
+        try {
+            db = await database.getDb(collectionName);
+
+            const findDocs = {
+                $or: [
+                    {owner: email},
+                    {allowed_users: email }
+                ]
+            };
+
+            const resultSet = await db.collection.find(findDocs).toArray();
+
+            if (resultSet) {
+                return res.json(resultSet);
+            }
+        } catch (e) {
+            return res.status(500).json({
+                errors: {
+                    status: 500,
+                    source: "/",
+                    title: "Database error",
+                    detail: e.message
+                }
+            });
+        } finally {
+            await db.client.close();
+        }
+    },
+
+    //add user to allowed_users
+    addAllowedUser: async function (res, req) {
+        //update allowed_user field with a new allowed user
+
+        /*example
+        db.docs.updateOne(
+        {_id: ObjectId("6158e4d2ad5edbc54f4cacd0")},
+        {$push: {allowed_users: "abc@123.se"}})
+        */
+
         let db;
 
         try {
             db = await database.getDb(collectionName);
             const col = await db.collection;
 
-            const doc = { name: req.body.name, content: req.body.content };
+            //find and update first doc
+            const filter = { _id: new ObjectId(req.body._id)};
+
+            const updateDoc = {
+                $push: {
+                    allowed_users: req.user.newUser,
+                }
+            };
+
+            const result = await col.update(filter, updateDoc);
+
+            console.log(
+
+                `${result.matchedCount} docs matched, updated ${result.modifiedCount} document(s)`,
+
+            );
+            // PUT requests should return 204 No Content
+            if (result) {
+                return res.status(204).json({
+                    data: {
+                        msg: "Allowed user added"
+                    }
+                });
+                // return  res.status(204).send();
+            }
+        } catch (e) {
+            return res.status(500).json({
+                errors: {
+                    status: 500,
+                    source: "/",
+                    title: "Database error",
+                    detail: e.message
+                }
+            });
+        } finally {
+            await db.client.close();
+        }
+    },
+
+    createData: async function (res, req) {
+        const email = req.user.email;
+
+        let db;
+
+        try {
+            db = await database.getDb(collectionName);
+            const col = await db.collection;
+
+            const doc = {
+                name: req.body.name,
+                content: req.body.content,
+                owner: email,
+                allowed_users: []
+            };
 
             const result = await col.insertOne(doc);
 
@@ -77,14 +174,7 @@ const data = {
             };
 
             const result = await col.update(filter, updateDoc);
-            // const result = await col.update({
-            //     _id: new ObjectId(req.body._id)
-            // }, {$set: {
-            //     content: req.body.content
-            // }});
 
-
-            // console.log("id: " + filter._id);
             console.log(
 
                 `${result.matchedCount} docs matched, updated ${result.modifiedCount} document(s)`,

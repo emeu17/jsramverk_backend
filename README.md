@@ -20,3 +20,11 @@ with the routes /, /docs and /list deployed. With the route ***docs*** you can l
 ## Kmom03
 
 Added tests using Mocha and Chai. Moved some of the code from the routes to model-files for easier maintenance and reusability.
+
+## Kmom04
+
+Added sockets, creating the possibility to edit the same document from multiple clients.
+
+## Kmom05
+
+Added authentication - registering and logging in users. Need to login to see documents.
