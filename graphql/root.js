@@ -25,8 +25,8 @@ const RootQueryType = new GraphQLObjectType({
         //
         //         return userArray.find(user => user.email === args.email);
         //     }
-            // resolve: () => 'Hello World'
-        },
+        //     // resolve: () => 'Hello World'
+        // },
         users: {
             type: GraphQLList(UserType),
             description: 'List of all users',

@@ -28,3 +28,7 @@ Added sockets, creating the possibility to edit the same document from multiple 
 ## Kmom05
 
 Added authentication - registering and logging in users. Need to login to see documents.
+
+## Kmom06
+
+GraphQL added. Possible to query users and docs and the combination of both.
