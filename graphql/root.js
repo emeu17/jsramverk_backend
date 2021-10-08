@@ -7,8 +7,10 @@ const {
 } = require('graphql');
 
 const UserType = require("./users.js");
+const DocType = require("./docs.js");
 
 const auth = require("../models/auth.js");
+const data = require("../models/data.js");
 
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
@@ -32,6 +34,13 @@ const RootQueryType = new GraphQLObjectType({
             description: 'List of all users',
             resolve: async function() {
                 return await auth.users();
+            }
+        },
+        docs: {
+            type: GraphQLList(DocType),
+            description: 'List of all documents',
+            resolve: async function() {
+                return await data.getAllData();
             }
         }
     })

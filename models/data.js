@@ -11,6 +11,10 @@ const data = {
             db = await database.getDb(collectionName);
             const resultSet = await db.collection.find({}).toArray();
 
+            if (res === undefined) {
+                return resultSet;
+            }
+
             if (resultSet) {
                 return res.json(resultSet);
             }
