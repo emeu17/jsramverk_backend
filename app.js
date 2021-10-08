@@ -12,6 +12,14 @@ const io = require("socket.io")(httpServer, {
     }
 });
 
+const visual = true;
+const { graphqlHTTP } = require('express-graphql');
+const {
+  GraphQLSchema
+} = require("graphql");
+
+const RootQueryType = require("./graphql/root.js");
+
 const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
@@ -67,6 +75,15 @@ app.use('/', index);
 app.use('/list', list);
 app.use('/docs', docs);
 app.use("/auth", auth);
+
+const schema = new GraphQLSchema({
+    query: RootQueryType
+});
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    graphiql: visual,
+}));
 
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler

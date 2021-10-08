@@ -203,12 +203,18 @@ const auth = {
         });
     },
 
+    //get all users, if res is undefined return
+    //to graphql non-json format
     users: async function(req, res) {
         let db;
 
         try {
             db = await database.getDb(collectionName);
             const resultSet = await db.collection.find({}).toArray();
+
+            if (res === undefined) {
+                return resultSet;
+            }
 
             if (resultSet) {
                 return res.json(resultSet);
