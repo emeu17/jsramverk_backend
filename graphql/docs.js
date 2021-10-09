@@ -2,8 +2,6 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLList,
-    GraphQLInt,
-    GraphQLFloat,
     GraphQLNonNull
 } = require('graphql');
 
@@ -14,8 +12,11 @@ const DocType = new GraphQLObjectType({
         _id: { type: GraphQLNonNull(GraphQLString) },
         name: { type: GraphQLNonNull(GraphQLString) },
         content: { type: GraphQLNonNull(GraphQLString) },
-        // allowed_users: { type: GraphQLNonNull(GraphQLList) },
+        owner: { type: GraphQLNonNull(GraphQLString) },
+        allowed_users: {
+            type: GraphQLList(GraphQLString)
+        },
     })
-})
+});
 
 module.exports = DocType;
