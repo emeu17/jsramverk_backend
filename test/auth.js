@@ -1,11 +1,8 @@
-/* global it describe before */
-
 process.env.NODE_ENV = 'test';
 
 //Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const HTMLParser = require('node-html-parser');
 
 const server = require('../app.js');
 
@@ -16,7 +13,7 @@ const collectionName = "users";
 
 chai.use(chaiHttp);
 
-let apiKey = "";
+// let apiKey = "";
 
 describe('auth', () => {
     before(() => {
@@ -58,8 +55,6 @@ describe('auth', () => {
                     // res.body.errors.status.should.be.equal(401);
                     done();
                 });
-        })
+        });
     });
-
-
 });

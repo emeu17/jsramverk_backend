@@ -7,12 +7,13 @@ const bodyParser = require("body-parser");
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer, {
     cors: {
+        // origin: "*",
         origin: "http://www.student.bth.se",
         methods: ["GET", "POST"]
     }
 });
 
-const visual = true;
+const visual = false;
 const { graphqlHTTP } = require('express-graphql');
 const {
     GraphQLSchema
@@ -24,6 +25,7 @@ const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
 const auth = require("./routes/auth.js");
+const authMod = require("./models/auth.js");
 
 const port = process.env.PORT || 1337;
 
@@ -80,10 +82,18 @@ const schema = new GraphQLSchema({
     query: RootQueryType
 });
 
-app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    graphiql: visual,
+app.post('/graphql',
+    (req, res, next) => authMod.checkToken(req, res, next),
+    graphqlHTTP({
+        schema: schema,
+        graphiql: visual,
 }));
+
+// app.use('/graphql',
+//     graphqlHTTP({
+//         schema: schema,
+//         graphiql: visual,
+// }));
 
 // Add routes for 404 and error handling
 // Catch 404 and forward to error handler

@@ -195,7 +195,7 @@ const auth = {
 
             req.user = {};
             req.user.email = decoded.email;
-            console.log("user: " + req.body.user);
+            // console.log("user: " + req.user.email);
             req.user.newUser = req.body.user;
 
             return next();
