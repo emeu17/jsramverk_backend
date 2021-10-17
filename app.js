@@ -25,6 +25,7 @@ const index = require('./routes/index');
 const list = require('./routes/list');
 const docs = require('./routes/docs');
 const auth = require("./routes/auth.js");
+const mail = require("./routes/mail.js");
 const authMod = require("./models/auth.js");
 
 const port = process.env.PORT || 1337;
@@ -77,6 +78,7 @@ app.use('/', index);
 app.use('/list', list);
 app.use('/docs', docs);
 app.use("/auth", auth);
+app.use("/mail", mail);
 
 const schema = new GraphQLSchema({
     query: RootQueryType
