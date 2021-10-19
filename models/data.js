@@ -122,6 +122,52 @@ const data = {
         }
     },
 
+    //add user to allowed_users, called from mail function
+    addAllowedUserMail: async function (res, req) {
+        //update allowed_user field with a new allowed user
+
+        /*example
+        db.docs.updateOne(
+        {_id: ObjectId("6158e4d2ad5edbc54f4cacd0")},
+        {$push: {allowed_users: "abc@123.se"}})
+        */
+        console.log("inside add user");
+        console.log("id: " + req.body._id);
+        console.log("user: " + req.body.newUser);
+
+        let db;
+
+        try {
+            db = await database.getDb(collectionName);
+            const col = await db.collection;
+
+            //find and update first doc
+            const filter = { _id: new ObjectId(req.body._id)};
+
+            const updateDoc = {
+                $push: {
+                    allowed_users: req.body.newUser,
+                }
+            };
+
+            const result = await col.update(filter, updateDoc);
+
+            console.log(
+
+                `${result.matchedCount} docs matched, updated ${result.modifiedCount} document(s)`,
+
+            );
+            // PUT requests should return 204 No Content
+            if (result) {
+                return true
+            }
+        } catch (e) {
+            return false
+        } finally {
+            await db.client.close();
+        }
+    },
+
     createData: async function (res, req) {
         const email = req.user.email;
 
@@ -163,6 +209,9 @@ const data = {
 
     updateData: async function (res, req) {
         let db;
+
+        console.log("inside updateData");
+        console.log("email: " + req.body._id);
 
         try {
             db = await database.getDb(collectionName);
