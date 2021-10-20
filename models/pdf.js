@@ -19,28 +19,11 @@ const pdf = {
     },
 
     createPdf: async function(req, res) {
-        // console.log("req:");
-        // console.log(req);
-        console.log("inside create pdf");
-        console.log("body:");
-        // console.log(req.body);
-
-        // to download to loacl filesystem with custom name pass a
-        // "path" option. see the page.pdf docs for more info
-        // https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions
-
         convertHTMLToPDF(
             req.body.html,
             pdf => {
-                console.log(pdf);
-                // var text = JSON.stringify(pdf);
-                // var bytes = utf8.encode(text);
-                // var encoded = base64.encode(bytes);
-                // // console.log(encoded);
                 // // res.setHeader('Content-Type', 'application/pdf');
-                // res.send(encoded);
-                // res.send(pdf);
-                res.json("this is a test");
+                res.send(pdf);
             },
             null,
             null,
@@ -51,7 +34,6 @@ const pdf = {
         });
     },
 
-    //
     createPdf2: function(req, res) {
         // console.log("inside create pdf222222");
         // console.log("body:");

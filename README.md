@@ -32,3 +32,7 @@ Added authentication - registering and logging in users. Need to login to see do
 ## Kmom06
 
 GraphQL added. Possible to query users and docs and the combination of both.
+
+## Project
+
+Added mailgun in order to send emails with invite to edit a specific document.
